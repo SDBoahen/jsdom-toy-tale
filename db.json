@@ -47,6 +47,12 @@
       "name": "Little Green Men",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Alien-PNG-File.png",
       "likes": -2
+    },
+    {
+      "id": 9,
+      "name": "Sam",
+      "image": "https://ca.slack-edge.com/T02MD9XTF-U018W9H54N6-6bb69b64ec24-512",
+      "likes": -3
     }
   ]
 }
