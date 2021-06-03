@@ -31,25 +31,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     
 
     const renderToy =(toyObj)=> {
 
-      // display a card for each toy
-      // create the outer element
+
+      // Display a Card for each Toy
+      // Create the Outer Wrapping/Containing Element 
+      ////  - In this case a <div>
       const cardDiv = document.createElement("div")
-      // assign any classes etc to it
+
+      // Assigning any classes etc to it
+      ////  - In this case: class="card"
       cardDiv.classList.add("card")
   
 
@@ -61,22 +54,28 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${toyObj.likes} Likes </p>
           <button data-id="${toyObj.id}" class="like-btn">Like <3</button>
 
-      `
+        `
+        // <button data-id="${toyObj.id}" class="delete-btn"> DELETE🚁💫🚂? </button>
+
       
-      // slap it on the DOM (toy-collection)
+      // SSSlap it on the DOM (toy-collection)
       const collectionDiv = document.querySelector("#toy-collection")
       collectionDiv.append(cardDiv)
 
-    }
-  
 
+    }
     const renderAllToys =(toyArray)=> {
 
-      for(let toyObj of toyArray){
 
-        renderToy(toyObj)
-        
-      }
+      toyArray.forEach(toyObj => { renderToy(toyObj) } )
+
+      ////  Using a (ForOfLoop)
+        // for(let toyObj of toyArray){
+
+        //   renderToy(toyObj)
+          
+        // }
+
 
     }
 
@@ -87,16 +86,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+  //=====  BASIC GET FETCH PROCESS  ========
 
 
   fetch(API_DATABASE_URL).then(response => response.json())
-  .then(fetchedArray => { 
+  .then(fetchedArray => { console.log(fetchedArray);
     
     renderAllToys(fetchedArray)
     // fetchedArray.forEach(arrayObj => console.log(arrayObj) ) 
 
   })  //// !!  ////  (fetchedArray => { 
-  // //then(console.log)  //
+  ////  .then(console.log)  //
+
+
+  // console.log(">>>>>>>>>>>", fetchedArray)
+  // WE DON'T HAVE ACCESS OUTSIDE OF FETCH  :(
 
 
   // fetch(API_DATABASE_URL).then(response => response.json())
@@ -113,9 +118,107 @@ document.addEventListener("DOMContentLoaded", () => {
   // // //then(console.log)  //
 
 
+  //=====  BASIC GET FETCH PROCESS  ========
+
+
+
+
+
+
+
+
+
+  //=====  POST FETCH PROCESS  ========
+
+
+  // Connecting 'JS-Puppet-Strings' to The New Toy Form
+  const newToyForm = document.querySelector(".add-toy-form")
+
+    newToyForm.addEventListener("submit", event =>{ event.preventDefault(); 
+        console.log(event.target) 
+
+
+        //  Getting User Form Input Data 📋🖋🤪
+        const name = event.target.name.value
+        const image = event.target.image.value
+
+
+      fetch(API_DATABASE_URL, {
+    
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify({ 
+          "name": name,
+          "image": image,
+          "likes": 0
+          /* WHAT WE ARE POSTING */
+        })
+    
+      })
+      .then(response => response.json())
+      .then(theThingWePostedButFromTheServer => renderToy(theThingWePostedButFromTheServer) )
+      //.then(theThingWePosted => console.log("Hey! This is what we posted 📋🤓👍:  ", theThingWePosted))  //
+
+        //       event.target.reset()   //  ****
+
+    })  ////  addEventListener("submit", event =>{
+      // newToyForm.addEventListener("submit", event =>{ console.log(event) })
+      // newToyForm.addEventListener("submit", event =>{ console.log(event.target) })
+
+      
+
+
+
 
 
   
+  //========  DELETE FETCH  ========
+
+    const cardsCollection = document.querySelector("#toy-collection")
+      console.log(deleteButton)
+
+
+
+    deleteButton.addEventListener("submit", event =>{ event.preventDefault(); 
+      console.log(event.target)  
+
+      //if(event.target.matches(".delete-btn")){ console.log(event.target) }
+
+      if(event.target.matches(".delete-btn")){ 
+        
+        console.log(event.target) 
+
+
+        const id = event.target.dataset.id
+
+
+
+        fetch(`{API_DATABASE_URL}/${id}`, {
+      
+        method: "DELETE"
+
+        })
+        .then(response => response.json())
+        .then(theThingWePosted => console.log("You Just Deleted  ->", theThingWePosted))
+
+      
+      }
+
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -133,50 +236,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-//  (3)
-// fetch(API_DATABASE_URL).then(response => response.json())
-// .then(fetchedArray => { 
-  
-//   renderAllToys(fetchedArray)
-//   // fetchedArray.forEach(arrayObj => console.log(arrayObj) ) 
 
-// })  //// !!  ////  (fetchedArray => { 
-// //then(console.log)  //
-
-
-
-
-
-
-
-
-
-  // const toyForm = document.querySelector(".add-toy-form")
-  // toyForm.addEventListener("submit", event => {
-  //   // ALWAYS DO THIS FOR FORM SUBMITS!
-  //   event.preventDefault()
-    
-  //   // make a POST /toys
-  //     // get the user input from the form
-  //   const name = event.target.name.value
-  //   const image = event.target.image.value
-
-  //   fetch(API_URL, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       "name": name,
-  //       "image": image,
-  //       "likes": 0
-  //     }),
-  //   })
-  //     .then(r => r.json())
-  //     .then(newToy => {
-  //       // when we get the new toy from the server
-  //       // slap it on the DOM
-  //       renderToy(newToy)
-  //       event.target.reset()
-  //     })
-  // })
